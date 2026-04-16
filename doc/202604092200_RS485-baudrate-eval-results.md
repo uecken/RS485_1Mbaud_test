@@ -45,7 +45,7 @@ xychart-beta
     title "構成A: SP485EE x SP485EE FER vs baud"
     x-axis "baud (kbps)" [250, 500]
     y-axis "FER (%)" 0 --> 100
-    bar [0, 95.6]
+    line [0, 95.6]
 ```
 
 ### 構成 B: ISO485 → SP485EEN (RS-485 5m)
@@ -63,7 +63,7 @@ xychart-beta
     title "構成B: ISO485 to SP485EE FER vs baud (gap=0 連続送信)"
     x-axis "baud (kbps)" [250, 500, 750, 1000]
     y-axis "FER (%)" 0 --> 100
-    bar [0, 87.2, 95.8, 96.8]
+    line [0, 87.2, 95.8, 96.8]
 ```
 
 > 当初 1Mbaud で `frames_lost=0` と出ていたのは TX `loop()` のオーバーヘッドで自然と間欠送信 (~500 fps) になっていただけ。TX バースト送信 (1 loop で 32 frame) に修正したら本当の連続送信になり、500k 以上で大量ロス。
@@ -86,7 +86,7 @@ xychart-beta
     title "構成C: Grove 直結 M5StickC RX到達率 vs baud"
     x-axis "baud (kbps)" [115, 250, 500, 1000]
     y-axis "RX到達率 (%)" 0 --> 105
-    bar [100, 100, 9, 6]
+    line [100, 100, 9, 6]
 ```
 
 > Grove ジャンパケーブル (シールドなし、隣接ピンとの容量結合あり) では **500 kbaud 以上で大量化け**。RS-485 トランシーバの DE/RE 問題とは別の **物理層信号品質の限界**。
@@ -107,7 +107,7 @@ xychart-beta
     title "構成D: Grove 直結 AtomS3 RX到達率 vs baud"
     x-axis "baud (kbps)" [250, 500, 1000]
     y-axis "RX到達率 (%)" 0 --> 105
-    bar [100, 2.2, 0.8]
+    line [100, 2.2, 0.8]
 ```
 
 > **重要**: M5StickC (ESP32) でも M5AtomS3 (ESP32-S3) でも **250 kbaud が安定動作の上限** という同じ結果。これは ESP32 系列固有の問題ではなく、**Grove ジャンパケーブルそのものの信号品質限界**であることが確定した。MCU を新しい ESP32-S3 に交換しても解決しない。
