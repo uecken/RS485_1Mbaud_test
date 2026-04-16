@@ -30,14 +30,33 @@
 
 ## ハードウェア構成
 
+### 1Mbaud 動作実績の構成 (= 構成 D)
+
+```
+[M5StickC] ──Grove──> [Unit RS485-ISO]  ══ RS-485 5m TPS ══>  [M5Stack RS485 Unit] <──Grove── [M5StickC]
+   TX側                  CA-IS3082W                                  SP485EE                       RX側
+   (ESP-IDF API)         (絶縁型・スルーレート制限なし)               (受信側は SP485EE で OK)      (ESP-IDF API)
+```
+
+**送信側に CA-IS3082W (Unit RS485-ISO) を置くこと**が 1Mbaud 安定の要。受信側は SP485EE (M5Stack RS485 Unit) でも 1Mbaud / FER 0% 達成 (39 条件中 #32, #36, #39 等で実測済)。
+
 ### 必要なもの
 
 | 役割 | パーツ | 搭載 IC | 備考 | リンク |
 |------|-------|--------|------|-------|
-| MCU × 2 | M5StickC または M5AtomS3 | ESP32 / ESP32-S3 | Leader/Follower 各 1 台 | [M5StickC](https://docs.m5stack.com/en/core/m5stickc) / [AtomS3](https://docs.m5stack.com/en/core/AtomS3) |
+| MCU × 2 | M5StickC または M5AtomS3 | ESP32 / ESP32-S3 | TX/RX 各 1 台 | [M5StickC](https://docs.m5stack.com/en/core/m5stickc) / [AtomS3](https://docs.m5stack.com/en/core/AtomS3) |
 | **送信側 RS-485 変換** | **M5Stack Unit RS485-ISO** | **CA-IS3082W** (絶縁型、スルーレート制限なし) | **1Mbaud 対応に必須** | [M5Stack 公式](https://docs.m5stack.com/ja/unit/iso485) |
 | 受信側 RS-485 変換 | M5Stack RS485 Unit | SP485EE | 受信側なら 1Mbaud OK | [Switch Science](https://www.switch-science.com/products/6554) |
 | ケーブル | ツイストペアシールド 5m | - | GND 両端接続、シールド片端 | - |
+
+### 双方向 1Mbaud にしたい場合
+
+上の構成は **片方向 (TX→RX)** のみ 1Mbaud。**双方向で 1Mbaud** にする場合は **両端を Unit RS485-ISO** にする (SP485EE は送信側になると破綻するため):
+
+```
+[M5StickC] <──Grove──> [Unit RS485-ISO]  ══ RS-485 5m TPS ══>  [Unit RS485-ISO] <──Grove──> [M5StickC]
+                          CA-IS3082W                                CA-IS3082W
+```
 
 ### 配線のポイント ([詳細](doc/202604101200_RS485-multi-vendor-interop.md))
 
