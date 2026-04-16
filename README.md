@@ -17,8 +17,8 @@
 |:---:|:---|:---|:---|:---:|:---:|:---:|
 | **A** | Grove 直結 (IC なし) | Arduino HardwareSerial | ジャンパ 5cm | **95-96%** | ~60 | **✗** |
 | **B** | Grove 直結 (IC なし) | **ESP-IDF UART API** | ジャンパ 5cm | **0%** | **~800** | **✓** |
-| **C** | SP485EE × 2 (M5Stack RS485 Unit) | ESP-IDF UART API | RS-485 5m TPS | NG (magic_hits=0) | 60-80 (全化け) | **✗** |
-| **D** | **CA-IS3082W (TX) → SP485EE (RX)** | **ESP-IDF UART API** | RS-485 5m TPS | **0%** | **~830 (101-109 KB/s)** | **✓ 完璧** |
+| **C** | M5Stack RS485 Unit (SP485EE) × 2 | ESP-IDF UART API | RS-485 5m TPS | NG (magic_hits=0) | 60-80 (全化け) | **✗** |
+| **D** | **Unit RS485-ISO (CA-IS3082W) (TX) → M5Stack RS485 Unit (SP485EE) (RX)** | **ESP-IDF UART API** | RS-485 5m TPS | **0%** | **~830 (101-109 KB/s)** | **✓ 完璧** |
 
 ### 読み方
 
@@ -39,6 +39,11 @@
 ```
 
 **送信側に CA-IS3082W (Unit RS485-ISO) を置くこと**が 1Mbaud 安定の要。受信側は SP485EE (M5Stack RS485 Unit) でも 1Mbaud / FER 0% 達成 (39 条件中 #32, #36, #39 等で実測済)。
+
+> **注意 — 逆方向 (右→左) は同じ baud 不可**:
+> 上の構成は **片方向 (TX=ISO485-ISO → RX=SP485EE) のみ 1Mbaud**。
+> 逆向きに送ろうとすると **送信側が SP485EE になり、スルーレート制限のため 250kbaud が連続送信の実用上限** (500kbaud 連続で FER 95.6% 実測、構成 A 参照)。
+> 双方向 1Mbaud にしたい場合は次節 (両端 Unit RS485-ISO) を参照。
 
 ### 必要なもの
 
