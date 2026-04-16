@@ -1,5 +1,7 @@
 # RS-485 / UART 1Mbaud Communication Test Firmware
 
+![M5StickC RS-485 1Mbaud 検証構成](doc/img/M5C_RS485_1Mbaud_test_setup.png)
+
 **ESP32 (M5StickC / AtomS3 等) での RS-485 / UART 通信テスト結果**。
 1Mbaud が実用的に使えるかを、MCU レベル (フレーム CRC / FER / スループット) で検証した FW 群。
 
