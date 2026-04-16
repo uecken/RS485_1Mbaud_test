@@ -24,7 +24,14 @@
 
 - **A → B** (**FW だけ変えた効果**): Arduino `read()` 1 byte 律速を撤廃 → 取りこぼしゼロ
 - **C → D** (**IC だけ変えた効果**): SP485EE のスルーレート制限を回避 (送信側を CA-IS3082W に変更) → 波形なまり解消
+- **重要: IC を改善しても FW を変えなければ 1Mbaud は出ない**: ISO485 → SP485EE 構成 + Arduino HW Serial では 1Mbaud で **FER 97%** (test 14)。**IC + FW の両方が必須**
 - **D が最終解**: **ESP-IDF UART API + CA-IS3082W 搭載 Unit RS485-ISO (送信側) = 1Mbaud 完璧動作** (実効 101-109 KB/s)
+
+> **「Arduino HW Serial = 1Mbaud NG」は連続ストリーム時のみ**:
+> 上記 A の FER 95% は **連続送信 (duty ~100%)** での結果。
+> **間欠 Request-Response パターン** (例: SCS サーボ READ、~5% duty) では
+> Arduino HW Serial でも 1Mbaud / 取りこぼし 0% で動作する (256B buffer に余裕あり、loop() で消化間に合う)。
+> 通信パターンによって最適 FW が変わる点に注意。
 
 ---
 
